@@ -477,5 +477,4 @@ class ProductManager extends FlexibleManager
     {
         return $this->getFlexibleRepository()->valueExists($value);
     }
-
 }

@@ -338,5 +338,4 @@ class ProductRepository extends FlexibleEntityRepository implements ProductRepos
             !(1 === count($result) && $value === ($result instanceof \Iterator ? $result->current() : current($result)))
         );
     }
-
 }

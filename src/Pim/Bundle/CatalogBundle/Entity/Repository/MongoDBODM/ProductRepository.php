@@ -227,6 +227,17 @@ class ProductRepository extends DocumentRepository implements ProductRepositoryI
      */
     public function valueExists(ProductValueInterface $value)
     {
-        return false;
+        $attributeId = $value->getAttribute()->getId();
+        $attributeBackend = $value->getAttribute()->getBackendType();
+        $data = $value->getData();
+
+        $result = $this->createQueryBuilder()
+            ->hydrate(false)
+            ->field("values.".$attributeBackend)->equals($data)
+            ->field("values.attributeId")->equals($attributeId)
+            ->getQuery()
+            ->getSingleResult();
+
+        return (count($result) !== 0);
     }
 }

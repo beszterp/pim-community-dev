@@ -96,4 +96,14 @@ interface ProductRepositoryInterface
      * @return integer
      */
     public function getProductsCountInCategory(CategoryInterface $category, QueryBuilder $categoryQb = null);
+
+    /**
+     * Returns true if a ProductValue with the provided value alread exists,
+     * false otherwise.
+     *
+     * @param ProductValueInterface $value
+     *
+     * @return boolean
+     */
+    public function valueExists(ProductValueInterface $value);
 }

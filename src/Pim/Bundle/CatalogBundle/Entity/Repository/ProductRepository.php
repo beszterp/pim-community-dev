@@ -110,7 +110,7 @@ class ProductRepository extends FlexibleEntityRepository implements
     /**
      * {@inheritdoc}
      */
-    public function findAllForVariantGroup(Group $variantGroup, array $criteria = array())
+    public function findAllForVariantGroup(Group $variantGroup, array $criteria = [])
     {
         $qb = $this->createQueryBuilder('Product');
 
@@ -185,9 +185,9 @@ class ProductRepository extends FlexibleEntityRepository implements
 
         $stmt->execute();
         $productCounts = $stmt->fetchAll();
-        $trees = array();
+        $trees = [];
         foreach ($productCounts as $productCount) {
-            $tree = array();
+            $tree = [];
             $tree['productCount'] = $productCount['product_count'];
             $tree['tree'] = $this->getEntityManager()->getRepository($categoryClass)->find($productCount['tree_id']);
             $trees[] = $tree;
@@ -237,9 +237,9 @@ class ProductRepository extends FlexibleEntityRepository implements
             $qb->setParameters($categoryQb->getParameters());
         }
 
-        $products = $qb->getQuery()->execute(array(), AbstractQuery::HYDRATE_ARRAY);
+        $products = $qb->getQuery()->execute([], AbstractQuery::HYDRATE_ARRAY);
 
-        $productIds = array();
+        $productIds = [];
         foreach ($products as $product) {
             $productIds[] = $product['id'];
         }
@@ -270,7 +270,7 @@ class ProductRepository extends FlexibleEntityRepository implements
      */
     public function getReferenceProperties()
     {
-        return array($this->getIdentifierCode());
+        return [$this->getIdentifierCode()];
     }
 
     /**
@@ -334,12 +334,12 @@ SELECT ch.label, lo.code as locale, COUNT(DISTINCT co.product_id) as total FROM 
 SQL;
         $sql = strtr(
             $sql,
-            array(
+            [
                 '%product_table%' => $this
                     ->getEntityManager()
                     ->getClassMetadata($this->flexibleConfig['flexible_class'])
                     ->getTableName()
-            )
+            ]
         );
 
         $stmt = $this->getEntityManager()->getConnection()->prepare($sql);

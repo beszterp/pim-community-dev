@@ -102,7 +102,7 @@ class ProductTransformer extends EntityTransformer
     /**
      * {@inheritdoc}
      */
-    public function transform($class, array $data, array $defaults = array())
+    public function transform($class, array $data, array $defaults = [])
     {
         $this->initializeAttributes($data);
 
@@ -151,7 +151,7 @@ class ProductTransformer extends EntityTransformer
             $transformerInfo = $this->getTransformerInfo($class, $columnInfo);
             $error = $this->setProperty($entity, $columnInfo, $transformerInfo, $data[$label]);
             if ($error) {
-                $this->errors[$class][$label] = array($error);
+                $this->errors[$class][$label] = [$error];
             }
         }
     }
@@ -168,7 +168,7 @@ class ProductTransformer extends EntityTransformer
     {
         $requiredAttributeCodes = $this->attributeCache->getRequiredAttributeCodes($entity);
         $flexibleValueClass = $this->productManager->getFlexibleValueName();
-        $this->transformedColumns[$flexibleValueClass] = array();
+        $this->transformedColumns[$flexibleValueClass] = [];
         foreach ($this->attributeColumnsInfo as $columnInfo) {
             $label = $columnInfo->getLabel();
             $transformerInfo = $this->getTransformerInfo($flexibleValueClass, $columnInfo);
@@ -178,7 +178,7 @@ class ProductTransformer extends EntityTransformer
             ) {
                 $error = $this->setProductValue($entity, $columnInfo, $transformerInfo, $value);
                 if ($error) {
-                    $this->errors[$class][$label] = array($error);
+                    $this->errors[$class][$label] = [$error];
                 }
             }
         }
@@ -196,18 +196,18 @@ class ProductTransformer extends EntityTransformer
             return;
         }
 
-        $associations = array();
+        $associations = [];
         foreach ($this->associationColumnsInfo as $columnInfo) {
             $key = $entity->getReference() . '.' . $columnInfo->getName();
             $suffixes = $columnInfo->getSuffixes();
             $lastSuffix = array_pop($suffixes);
             if (!isset($associations[$key])) {
-                $associations[$key] = array(
+                $associations[$key] = [
                     'owner'           => $entity->getReference(),
                     'associationType' => $columnInfo->getName(),
-                );
+                ];
             }
-            $associations[$key][$lastSuffix] =  $data[$columnInfo->getLabel()] ?: array();
+            $associations[$key][$lastSuffix] =  $data[$columnInfo->getLabel()] ?: [];
         }
 
         foreach ($associations as $association) {
@@ -232,7 +232,7 @@ class ProductTransformer extends EntityTransformer
         $value
     ) {
         if ($transformerInfo[0] instanceof SkipTransformer) {
-            return array();
+            return [];
         }
         $productValue = $this->getProductValue($product, $columnInfo);
 
@@ -272,14 +272,14 @@ class ProductTransformer extends EntityTransformer
         $class = $this->productManager->getFlexibleName();
         $columnsInfo = $this->columnInfoTransformer->transform($class, array_keys($data));
         $this->attributes = $this->attributeCache->getAttributes($columnsInfo);
-        $this->attributeColumnsInfo = array();
-        $this->propertyColumnsInfo = array();
-        $this->associationColumnsInfo = array();
+        $this->attributeColumnsInfo = [];
+        $this->propertyColumnsInfo = [];
+        $this->associationColumnsInfo = [];
         foreach ($columnsInfo as $columnInfo) {
             $columnName = $columnInfo->getName();
             $suffixes = $columnInfo->getSuffixes();
             $lastSuffix = array_pop($suffixes);
-            if (in_array($lastSuffix, array('groups', 'products'))) {
+            if (in_array($lastSuffix, ['groups', 'products'])) {
                 $this->associationColumnsInfo[] = $columnInfo;
             } elseif (isset($this->attributes[$columnName])) {
                 $attribute = $this->attributes[$columnName];

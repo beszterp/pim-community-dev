@@ -74,7 +74,7 @@ class AttributeTransformerTest extends EntityTransformerTestCase
             ->getMock('Pim\Bundle\CatalogBundle\Entity\Repository\ReferableEntityRepositoryInterface');
         $this->repository->expects($this->any())
             ->method('getReferenceProperties')
-            ->will($this->returnValue(array('code')));
+            ->will($this->returnValue(['code']));
 
         $this->doctrine
             ->expects($this->any())
@@ -85,10 +85,10 @@ class AttributeTransformerTest extends EntityTransformerTestCase
 
     public function getTransformData()
     {
-        return array(
-            'no_errors'     => array(false),
-            'nested_errors' => array(true)
-        );
+        return [
+            'no_errors'     => [false],
+            'nested_errors' => [true]
+        ];
     }
 
     /**
@@ -103,13 +103,13 @@ class AttributeTransformerTest extends EntityTransformerTestCase
         $this->addColumn('attribute');
 
         if ($nestedErrors) {
-            $errors = array(
-                'co1' => array(
-                    array('error')
-                )
-            );
+            $errors = [
+                'co1' => [
+                    ['error']
+                ]
+            ];
         } else {
-            $errors = array();
+            $errors = [];
         }
         $this->transformerRegistry->expects($this->any())
             ->method('getErrors')
@@ -118,34 +118,34 @@ class AttributeTransformerTest extends EntityTransformerTestCase
 
         $object = $this->transformer->transform(
             'Pim\Bundle\CatalogBundle\Entity\Attribute',
-            array(
+            [
                 'code' => 'code',
                 'type' => 'type',
                 'col1' => 'val1',
                 'col2' => 'val2',
-                'options' => array(
-                    array(
+                'options' => [
+                    [
                         'code' => 'o1code',
                         'col1' => 'o1val1',
                         'col2' => 'o1val2',
-                    ),
-                    array(
+                    ],
+                    [
                         'col1' => 'o2val1',
                         'col2' => 'o2val2',
-                    ),
-                )
-            )
+                    ],
+                ]
+            ]
         );
 
         $this->assertInstanceOf('Pim\Bundle\CatalogBundle\Entity\Attribute', $object);
         if ($nestedErrors) {
             $this->assertEquals(
-                array(
-                    'options' => array(
-                        array('error'),
-                        array('error')
-                    )
-                ),
+                [
+                    'options' => [
+                        ['error'],
+                        ['error']
+                    ]
+                ],
                 $this->transformer->getErrors('Pim\Bundle\CatalogBundle\Entity\Attribute')
             );
         } else {

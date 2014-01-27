@@ -25,7 +25,7 @@ class ChannelManagerSpec extends ObjectBehavior
     function it_provides_channels(ObjectManager $objectManager, ChannelRepository $repository)
     {
         $objectManager->getRepository('PimCatalogBundle:Channel')->willReturn($repository);
-        $repository->findBy(array())->willReturn(array('mobile', 'ecommerce'));
+        $repository->findBy([])->willReturn(['mobile', 'ecommerce']);
         $this->getChannels()->shouldBeArray();
         $this->getChannels()->shouldHaveCount(2);
     }

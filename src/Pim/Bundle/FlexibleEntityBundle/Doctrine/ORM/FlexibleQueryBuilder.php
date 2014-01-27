@@ -121,7 +121,7 @@ class FlexibleQueryBuilder implements FlexibleQueryBuilderInterface
     {
         $attributeType = $attribute->getAttributeType();
         $allowed = $this->getAllowedOperators($attribute);
-        $operators = is_array($operator) ? $operator : array($operator);
+        $operators = is_array($operator) ? $operator : [$operator];
         foreach ($operators as $key) {
             if (!in_array($key, $allowed)) {
                 throw new FlexibleQueryException(

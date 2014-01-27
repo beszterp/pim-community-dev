@@ -26,9 +26,9 @@ class ProductTransformerTest extends EntityTransformerTestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->fields = array();
-        $this->values = array();
-        $this->attributes = array();
+        $this->fields = [];
+        $this->values = [];
+        $this->attributes = [];
 
         $this->metadata->expects($this->any())
             ->method('hasField')
@@ -49,7 +49,7 @@ class ProductTransformerTest extends EntityTransformerTestCase
             ->will($this->returnValue('id'));
         $this->product->expects($this->any())
             ->method('createValue')
-            ->will($this->returnCallback(array($this, 'createValue')));
+            ->will($this->returnCallback([$this, 'createValue']));
 
         $this->flexibleRepository = $this->getMock(
             'Pim\Bundle\CatalogBundle\Entity\Repository\ReferableEntityRepositoryInterface'
@@ -72,11 +72,11 @@ class ProductTransformerTest extends EntityTransformerTestCase
             ->getMock();
         $this->attributeCache->expects($this->any())
             ->method('getAttributes')
-            ->will($this->returnCallback(array($this, 'getAttributes')));
+            ->will($this->returnCallback([$this, 'getAttributes']));
 
         $this->attributeCache->expects($this->any())
             ->method('getRequiredAttributeCodes')
-            ->will($this->returnValue(array('required')));
+            ->will($this->returnValue(['required']));
 
         $this->associationsReader = $this->getMock('Pim\Bundle\ImportExportBundle\Reader\CachedReader');
 
@@ -106,13 +106,13 @@ class ProductTransformerTest extends EntityTransformerTestCase
 
         $product = $this->transformer->transform(
             'product_class',
-            array(
+            [
                 'identifier' => 'id',
                 'col1' => 'value1',
                 'col2' => 'value2',
                 'skip' => 'skip',
                 'required' => ''
-            )
+            ]
         );
 
         $this->assertEquals('col1_path-value1', $product->col1_path);
@@ -123,13 +123,13 @@ class ProductTransformerTest extends EntityTransformerTestCase
 
         $product2 = $this->transformer->transform(
             'product_class',
-            array(
+            [
                 'identifier' => 'id2',
                 'col1' => 'value3',
                 'col2' => 'value4',
                 'skip' => 'skip',
                 'required' => ''
-            )
+            ]
         );
 
         $this->assertEquals('col1_path-value3', $product2->col1_path);
@@ -139,13 +139,13 @@ class ProductTransformerTest extends EntityTransformerTestCase
 
         $product3 = $this->transformer->transform(
             'product_class',
-            array(
+            [
                 'identifier' => 'id3',
                 'col1' => 'value5',
                 'col2' => 'value6',
                 'skip' => 'skip',
                 'required' => ''
-            )
+            ]
         );
 
         $this->assertEquals('col1_path-value5', $product3->col1_path);
@@ -162,23 +162,23 @@ class ProductTransformerTest extends EntityTransformerTestCase
 
         $this->transformer->transform(
             'product_class',
-            array('identifier' => 'id', 'col1' => 'val1', 'col2' => 'val2')
+            ['identifier' => 'id', 'col1' => 'val1', 'col2' => 'val2']
         );
         $this->assertEquals(
-            array(
-                'col1' => array(
-                    array(
+            [
+                'col1' => [
+                    [
                         'error_message',
-                        array('error_parameters')
-                    )
-                ),
-                'col2' => array(
-                    array(
+                        ['error_parameters']
+                    ]
+                ],
+                'col2' => [
+                    [
                         'error_message',
-                        array('error_parameters')
-                    )
-                )
-            ),
+                        ['error_parameters']
+                    ]
+                ]
+            ],
             $this->transformer->getErrors('product_class')
         );
     }
@@ -188,20 +188,20 @@ class ProductTransformerTest extends EntityTransformerTestCase
         $this->addAttribute('col2');
         $this->addColumn('col1');
         $this->addColumn('col2', true, false);
-        $this->addColumn('association1', false, true, false, false, array('products'));
-        $this->addColumn('association1', false, true, false, false, array('groups'));
-        $this->addColumn('association2', false, true, false, false, array('products'));
+        $this->addColumn('association1', false, true, false, false, ['products']);
+        $this->addColumn('association1', false, true, false, false, ['groups']);
+        $this->addColumn('association2', false, true, false, false, ['products']);
         $this->associationsReader
             ->expects($this->at(0))
             ->method('addItem')
             ->with(
                 $this->equalTo(
-                    array(
+                    [
                         'owner' => 'id',
                         'associationType' => 'association1',
                         'products'        => '1,2,3',
                         'groups'          => '1,2'
-                    )
+                    ]
                 )
             );
         $this->associationsReader
@@ -209,24 +209,24 @@ class ProductTransformerTest extends EntityTransformerTestCase
             ->method('addItem')
             ->with(
                 $this->equalTo(
-                    array(
+                    [
                         'owner' => 'id',
                         'associationType' => 'association2',
                         'products'        => '4,5'
-                    )
+                    ]
                 )
             );
 
         $product = $this->transformer->transform(
             'product_class',
-            array(
+            [
                 'identifier' => 'id',
                 'col1' => 'value1',
                 'col2' => 'value2',
                 'association1_products' => '1,2,3',
                 'association1_groups'   => '1,2',
                 'association2_products' => '4,5'
-            )
+            ]
         );
 
         $this->assertEquals('col1_path-value1', $product->col1_path);
@@ -242,9 +242,9 @@ class ProductTransformerTest extends EntityTransformerTestCase
         $addField = true,
         $skip = false,
         $failing = false,
-        $suffixes = array()
+        $suffixes = []
     ) {
-        $label = implode('_', array_merge(array($name), $suffixes));
+        $label = implode('_', array_merge([$name], $suffixes));
         $column = parent::addColumn($label, $addTransformer, $skip, $failing, $suffixes);
         $column->expects($this->any())
             ->method('getName')

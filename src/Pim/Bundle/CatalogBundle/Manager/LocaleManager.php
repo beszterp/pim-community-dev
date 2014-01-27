@@ -89,7 +89,7 @@ class LocaleManager
      */
     public function getDisabledLocales()
     {
-        $criterias = array('activated' => false);
+        $criterias = ['activated' => false];
 
         return $this->getLocales($criterias);
     }
@@ -101,7 +101,7 @@ class LocaleManager
      *
      * @return \Doctrine\Common\Persistence\mixed
      */
-    public function getLocales($criterias = array())
+    public function getLocales($criterias = [])
     {
         return $this->repository->findBy($criterias);
     }
@@ -115,7 +115,7 @@ class LocaleManager
      */
     public function getLocaleByCode($code)
     {
-        return $this->repository->findOneBy(array('code' => $code));
+        return $this->repository->findOneBy(['code' => $code]);
     }
 
     /**
@@ -125,7 +125,7 @@ class LocaleManager
      */
     public function getActiveCodes()
     {
-        $codes = array();
+        $codes = [];
         foreach ($this->getActiveLocales() as $locale) {
             $codes[] = $locale->getCode();
         }
@@ -141,7 +141,7 @@ class LocaleManager
     public function getUserLocales()
     {
         if (!isset($this->userLocales)) {
-            $this->userLocales = array();
+            $this->userLocales = [];
             foreach ($this->getActiveLocales() as $locale) {
                 if ($this->securityFacade->isGranted(sprintf('pim_catalog_locale_%s', $locale->getCode()))) {
                     $this->userLocales[] = $locale;
@@ -176,7 +176,7 @@ class LocaleManager
     {
         $locales = $this->repository->getAvailableFallbacks();
 
-        $codes = array();
+        $codes = [];
         foreach ($locales as $locale) {
             $codes[] = $locale->getCode();
         }

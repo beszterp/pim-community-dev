@@ -140,7 +140,7 @@ class FlexibleEntityRepository extends EntityRepository implements
      * @return array The objects.
      */
     public function findByWithAttributes(
-        array $attributes = array(),
+        array $attributes = [],
         array $criteria = null,
         array $orderBy = null,
         $limit = null,
@@ -164,7 +164,7 @@ class FlexibleEntityRepository extends EntityRepository implements
      */
     public function applyFilterByAttribute(QueryBuilder $qb, $attributeCode, $attributeValue, $operator = '=')
     {
-        $codeToAttribute = $this->getCodeToAttributes(array());
+        $codeToAttribute = $this->getCodeToAttributes([]);
         $attributeCodes = array_keys($codeToAttribute);
         if (in_array($attributeCode, $attributeCodes)) {
             $attribute = $codeToAttribute[$attributeCode];
@@ -189,7 +189,7 @@ class FlexibleEntityRepository extends EntityRepository implements
      */
     public function applySorterByAttribute(QueryBuilder $qb, $attributeCode, $direction)
     {
-        $codeToAttribute = $this->getCodeToAttributes(array());
+        $codeToAttribute = $this->getCodeToAttributes([]);
         $attributeCodes = array_keys($codeToAttribute);
         if (in_array($attributeCode, $attributeCodes)) {
             $attribute = $codeToAttribute[$attributeCode];
@@ -210,7 +210,7 @@ class FlexibleEntityRepository extends EntityRepository implements
     public function findWithSortedAttribute($id)
     {
         return $this
-            ->findByWithAttributesQB(array(), array('id' => $id))
+            ->findByWithAttributesQB([], ['id' => $id])
             ->addOrderBy('Attribute.sortOrder')
             ->getQuery()
             ->getOneOrNullResult();
@@ -241,7 +241,7 @@ class FlexibleEntityRepository extends EntityRepository implements
 
         // prepare associative array
         $attributes = $qb->getQuery()->getResult();
-        $codeToAttribute = array();
+        $codeToAttribute = [];
         foreach ($attributes as $attribute) {
             $codeToAttribute[$attribute->getCode()] = $attribute;
         }
@@ -301,7 +301,7 @@ class FlexibleEntityRepository extends EntityRepository implements
      * @return array The objects.
      */
     protected function findByWithAttributesQB(
-        array $attributes = array(),
+        array $attributes = [],
         array $criteria = null,
         array $orderBy = null,
         $limit = null,

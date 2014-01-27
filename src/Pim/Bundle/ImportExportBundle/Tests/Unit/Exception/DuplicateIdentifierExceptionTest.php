@@ -15,10 +15,10 @@ class DuplicateIdentifierExceptionTest extends \PHPUnit_Framework_TestCase
 {
     public function testCreate()
     {
-        $ex = new DuplicateIdentifierException('id', array('key1' => 'val1'));
+        $ex = new DuplicateIdentifierException('id', ['key1' => 'val1']);
         $this->assertEquals('The unique code "id" was already read in this file', $ex->getMessage());
         $this->assertEquals('The unique code "%identifier%" was already read in this file', $ex->getMessageTemplate());
-        $this->assertEquals(array('%identifier%' => 'id'), $ex->getMessageParameters());
-        $this->assertEquals(array('key1' => 'val1'), $ex->getItem());
+        $this->assertEquals(['%identifier%' => 'id'], $ex->getMessageParameters());
+        $this->assertEquals(['key1' => 'val1'], $ex->getItem());
     }
 }

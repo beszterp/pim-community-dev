@@ -85,13 +85,13 @@ class FlexibleManager implements LocalizableInterface, ScopableInterface
         $optionMeta     = $this->objectManager->getClassMetadata($optionClass);
         $optionValClass = $optionMeta->getAssociationMappings()['optionValues']['targetEntity'];
 
-        $this->flexibleConfig = array(
+        $this->flexibleConfig = [
             'flexible_class'               => $flexibleName,
             'flexible_value_class'         => $valueClass,
             'attribute_class'              => $attributeClass,
             'attribute_option_class'       => $optionClass,
             'attribute_option_value_class' => $optionValClass
-        );
+        ];
 
         $this->repository = $manager->getRepository($this->flexibleName);
         $this->repository->setFlexibleConfig($this->flexibleConfig);

@@ -45,9 +45,9 @@ class LocalizableListener implements EventSubscriber
      */
     public function getSubscribedEvents()
     {
-        return array(
+        return [
             'postLoad'
-        );
+        ];
     }
 
     /**
